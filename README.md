@@ -184,7 +184,7 @@ function scheduleUpdate() {
 Since, from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await):
 > If the value of the expression following the await operator is not a Promise, it's converted to a resolved Promise.
 
-In fact, [Justin Fagnani](https://twitter.com/justinfagnani), one of the authors of LitElement, told me on twitter that the pre-LitElement version did exactly this:
+In fact, [Justin Fagnani](https://twitter.com/justinfagnani), one of the authors of LitElement, once told me on twitter that the pre-LitElement version did exactly this:
 
 ![twitter screenshot](./img/justin.png)
 
