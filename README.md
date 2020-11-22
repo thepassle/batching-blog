@@ -25,7 +25,7 @@ class MyElement extends LitElement {
 }
 ```
 
-LitElement is _reactive_ and _observes_ your properties to kick of what is known as its "render pipeline". What this means is that whenever we change a property in our component, it'll update and re-render the component. This is nice, because it means we don't have to do anything manually. In the code example above, just the act of setting a new value to `this.myPropertyA` will cause our component to re-render.
+LitElement is _reactive_ and _observes_ your properties to kick off what is known as its "render pipeline". What this means is that whenever we change a property in our component, it'll update and re-render the component. This is nice, because it means we don't have to do anything manually. In the code example above, just the act of setting a new value to `this.myPropertyA` will cause our component to re-render.
 
 Now consider another example:
 ```js
