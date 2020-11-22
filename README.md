@@ -128,7 +128,7 @@ If we go back to our code snippet, we can see that the following happens:
 So why is this important? How does this allow us to use microtasks to _batch_ work? Let's take a look at a practical example:
 
 ```js
-/* We declare and initialize a variable to keep track of wether or not an update has already been requested */
+/* We declare and initialize a variable to keep track of whether or not an update has already been requested */
 let updateRequested = false;
 
 function scheduleUpdate() {
