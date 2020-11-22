@@ -244,7 +244,7 @@ Be aware, however, that JavaScript is single-threaded, and blocking the main thr
 
 ### 🧙‍♂️ Automagically requested updates
 
-LitElement is _reactive_. What that means is that, like many other modern frontend libraries, we dont have to worry as much about manually rendering or re-rendering the contents of our component. All we have to do as a user of LitElement is declare our properties, LitElement will then _observe_ these properties for us, and when a property has changed LitElement takes care of updating our component for us. Nice. I like not doing work.
+LitElement is _reactive_. What this means is that, like many other modern frontend libraries, we dont have to worry as much about manually rendering or re-rendering the contents of our component. All we have to do as a user of LitElement is declare our properties, LitElement will then _observe_ these properties for us, and when a property has changed LitElement takes care of updating our component for us. Nice. I like not doing work.
 
 ![counter component](./img/wcdev.png)
 
