@@ -333,7 +333,7 @@ class Batching {
 
     /** 
      * In here, we need a check to see if an update has already previously been requested.
-     * If an update already is already requested, we don't want to do any unnecessary work!
+     * If an update is already requested, we don't want to do any unnecessary work!
      */
     if (!this.updateRequested) {
 
