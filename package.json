@@ -17,9 +17,9 @@
     "url": "https://github.com/thepassle/batching-blog/issues"
   },
   "homepage": "https://github.com/thepassle/batching-blog#readme",
-  "dependencies": {
+  "devDependencies": {
     "@open-wc/testing": "^2.5.32",
     "@web/test-runner": "^0.9.12",
-    "sinon": "^9.2.1"
+    "hanbi": "^0.4.0"
   }
 }

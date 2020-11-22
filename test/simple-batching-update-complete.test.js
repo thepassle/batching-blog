@@ -1,24 +1,24 @@
 import { expect } from '@open-wc/testing';
-import { spy } from 'sinon';
+import { stubMethod } from 'hanbi';
 import { Batching } from '../snippets/simple-batching-update-complete.js';
 
 describe('simple-batching-update-complete', () => {
   it('only calls `update` once', async () => {
     const batching = new Batching();
-    const updateSpy = spy(batching, 'update');
+    const updateStub = stubMethod(batching, 'update');
 
     batching.a = 1;
     batching.b = 2;
 
     await batching.updateComplete;
 
-    expect(updateSpy).to.have.been.calledOnce;
-    updateSpy.restore();
+    expect(updateStub.callCount).to.equal(1);
+    updateStub.restore();
   });
 
   it('calls `update` twice', async () => {
     const batching = new Batching();
-    const updateSpy = spy(batching, 'update');
+    const updateStub = stubMethod(batching, 'update');
 
     batching.a = 1;
     batching.b = 2;
@@ -29,7 +29,7 @@ describe('simple-batching-update-complete', () => {
 
     await batching.updateComplete;
 
-    expect(updateSpy).to.have.been.calledTwice;
-    updateSpy.restore();
+    expect(updateStub.callCount).to.equal(2);
+    updateStub.restore();
   });
 });
