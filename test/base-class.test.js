@@ -1,10 +1,10 @@
-import { expect } from '@open-wc/testing';
+import { expect, fixtureSync } from '@open-wc/testing';
 import { stubMethod } from 'hanbi';
-import { MyElement } from '../snippets/base-class.js';
+import '../snippets/base-class.js';
 
 describe('base-class', () => {
   it('only calls `update` once', async () => {
-    const element = new MyElement();
+    const element = fixtureSync('<my-element></my-element>');
     const updateStub = stubMethod(element, 'update');
 
     element.a = 1;
@@ -17,7 +17,7 @@ describe('base-class', () => {
   });
 
   it('calls `update` twice', async () => {
-    const element = new MyElement();
+    const element = fixtureSync('<my-element></my-element>');
     const updateStub = stubMethod(element, 'update');
 
     element.a = 1;

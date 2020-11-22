@@ -27,11 +27,10 @@ class BatchingElement extends HTMLElement {
 }
 
 /* We create a new class, MyElement, that extends from our BatchingElement base class */
-export class MyElement extends BatchingElement {
+class MyElement extends BatchingElement {
 
   constructor() {
     super();
-
     /* We attach a shadowRoot to our component for good measure */
     this.attachShadow({ mode: "open" });
   }
