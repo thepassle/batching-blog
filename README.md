@@ -112,7 +112,7 @@ Here's the answer, the order of the resulting console logs of this code is:
 // 2
 ```
 
-We'll have [Jake Archibald](https://twitter.com/jaffathecake) explain us why this exactly happens:
+We'll have [Jake Archibald](https://twitter.com/jaffathecake) explain to us why exactly this happens:
 
 > The microtask queue is processed after callbacks as long as no other JavaScript is mid-execution, and at the end of each task. Any additional microtasks queued during microtasks are added to the end of the queue and also processed.
 
