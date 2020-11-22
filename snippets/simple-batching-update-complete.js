@@ -48,24 +48,3 @@ export class Batching {
     this.requestUpdate();
   }
 }
-
-/* We use an IIFE (Immediately Invoked Function Expression), because top-level await is not a thing yet 😑 */
-(async () => {
-  /* We instantiate a new instance of our class */
-  const batching = new Batching();
-
-  /* Set multiple properties in a row */
-  batching.a = 1;
-  batching.b = 2;
-
-  /* And this is where we `await` an update */
-  await batching.updateComplete;
-
-  /* We then assign another property */
-  batching.b = 3;
-
-  /**
-   * 🎉 The result:
-   * "updating!" is logged to the console twice!
-   */
-})();

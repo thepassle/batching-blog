@@ -48,15 +48,3 @@ export class Batching {
     this.requestUpdate();
   }
 }
-
-/* We instantiate a new instance of our class */
-const batching = new Batching();
-
-/* And we set multiple properties */
-batching.a = 1;
-batching.b = 2;
-
-/**
-* 🎉 The result:
-* "updating!" is only logged to the console once because of the batching!
-*/
