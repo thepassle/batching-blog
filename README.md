@@ -6,7 +6,7 @@ Gotta come up with a clever title. Suggestions?
 
 ## Intro
 
-[LitElement](https://lit-element.polymer-project.org/) is a base class for developing web components. It's very lightweight, very fast at what it does, and takes a lot of the heavy lifting of writing web components out of the developers hands, by being lazy (or: efficient).
+[LitElement](https://lit-element.polymer-project.org/) is a base class for developing web components. It's very small, and very efficient at updating, and takes a lot of the heavy lifting of writing web components out of the developers hands, by being lazy (or: efficient).
 
 Some questions that I often get during workshops, or from new colleagues who have just started working with LitElement are: 
 - How exactly does LitElement achieve its efficient updates? 
@@ -82,6 +82,8 @@ input.addEventListener("input", debouncedSearch);
 
 If the user types the search keyword "javascript" in the input, instead of firing 10 API requests (one request for every character in the word "javascript"), we only fire one request; when the user has finished typing.
 
+> If you're interested in reading more about debouncing, here's a great blog on [css-tricks.com](https://css-tricks.com/debouncing-throttling-explained-examples/)
+
 However, and I’m sorry to disappoint, this is not how LitElement does things, but important to illustrate the point of "batching". Before we go deeper into that, we’re going to require some knowledge about...
 
 ## THE EVENT LOOP!
@@ -128,61 +130,77 @@ If we go back to our code snippet, we can see that the following happens:
 So why is this important? How does this allow us to use microtasks to _batch_ work? Let's take a look at a practical example:
 
 ```js
-/* We declare and initialize a variable to keep track of whether or not an update has already been requested */
-let updateRequested = false;
+class Batching {
+  /* We declare and initialize a variable to keep track of whether or not an update has already been requested */
+  updateRequested = false;
 
-function scheduleUpdate() {
-  /** 
-   * In here, we need a check to see if an update is already previously requested.
-   * If an update already is requested, we don't want to do any unnecessary work!
-   */
-  if(!updateRequested) {
-
-    /* If no update has yet been requested, we set the `updateRequested` flag to `true` */
-    updateRequested = true;
-
+  scheduleUpdate() {
     /** 
-     * Since we now know that microtasks run after JavaScript has finished
-     * executing, we can use this knowledge to our advantage, and only set 
-     * the `updateRequested` flag back to `false` again once all the tasks 
-     * have run, essentially delaying, or _batching_ the update!
+     * In here, we need a check to see if an update is already previously requested.
+     * If an update already is requested, we don't want to do any unnecessary work!
      */
-    Promise.resolve().then(() => {
-      updateRequested = false;
-      update();
-    });
+    if(!this.updateRequested) {
+
+      /* If no update has yet been requested, we set the `updateRequested` flag to `true` */
+      this.updateRequested = true;
+
+      /** 
+       * Since we now know that microtasks run after JavaScript has finished
+       * executing, we can use this knowledge to our advantage, and only set 
+       * the `updateRequested` flag back to `false` again once all the tasks 
+       * have run, essentially delaying, or _batching_ the update!
+       */
+      Promise.resolve().then(() => {
+        this.updateRequested = false;
+        this.update();
+      });
+    }
+  }
+
+  /* This is our `update` method that we only want to be called once */
+  update() {
+    console.log('updating!');
   }
 }
 
-/* This is our `update` function that we only want to be called once */
-function update() {
-  console.log('updating!');
-}
+const batching = new Batching();
 
 /* We call scheduleUpdate in quick succession */
-scheduleUpdate();
-scheduleUpdate();
-scheduleUpdate();
+batching.scheduleUpdate();
+batching.scheduleUpdate();
+batching.scheduleUpdate();
 
-// "updating!" only logged once
+/* 🎉 The result: */
+
+// "updating!" 
+
+/* `update` only ran once! */
 ```
 
 What we do here is essentially _gatekeep_ potentially multiple incoming calls for `scheduleUpdate` with the `if` statement, and cleverly use our newfound knowledge of microtasks to our advantage to process any other incoming calls _first_, and only once JavaScript has finished executing, and when its microtask processing time, our `update` function is called.
 
-As a fun tidbit of knowledge, we can also write the `scheduleUpdate` function like so:
+As a fun tidbit of knowledge, we can also write the `scheduleUpdate` method like so:
 
 ```js
-function scheduleUpdate() {
-  if(!updateRequested) {
-    updateRequested = true;
-    updateRequested = await false;
-    update();
+class Batching {
+  // ...
+
+  async scheduleUpdate() {
+    if(!this.updateRequested) {
+      this.updateRequested = true;
+      this.updateRequested = await false;
+      this.update();
+    }
   }
+
+  // ...
 }
 ```
 
 Since, from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await):
 > If the value of the expression following the await operator is not a Promise, it's converted to a resolved Promise.
+
+In other words, once we set `updateRequested`, we don't immediately unset it, the `await` keyword ensures that we only _schedule_ it to be unset.
 
 In fact, [Justin Fagnani](https://twitter.com/justinfagnani), one of the authors of LitElement, once told me on twitter that the pre-LitElement version did exactly this:
 
@@ -250,7 +268,7 @@ LitElement is _reactive_. What this means is that, like many other modern fronte
 
 > Simple counter element, courtesy of the lovely folks over at [webcomponents.dev](https://webcomponents.dev)
 
-Imagine we have a simple counter element that has a `count` property. All we need to do to trigger LitElement to rerender is set a new value to the `count` property: `this.count = 1;`, and LitElement will automagically _request_ an update.
+Imagine we have a simple counter element that has a `count` property. All thats needed for LitElement to rerender, is set a new value to the `count` property like so: `this.count = 1;`. This will automagically cause LitElement to request an update.
 
 But... how? How does LitElement know that the `count` property was set? How does it _observe_ our properties?
 
@@ -299,7 +317,7 @@ Imagine we have a component with a `user` property that looks something like thi
 }
 ```
 
-People often expect that setting, for example, the `name` property on the `user` object should trigger a rerender, like so: `this.user.name = "Nick";`, and are surprised to find that it _doesn't_. The reason for this is that by setting the `name` property of the `user` object, we don't actually change the value of the `user` object itself, and as such, the `requestUpdate()` method is never called!
+People often expect that setting, for example, the `name` property on the `user` object should trigger a rerender, like so: `this.user.name = "Nick";`, and are surprised to find that it _doesn't_. The reason for this is that by setting the `name` property of the `user` object, we don't actually change the `user` object itself, we changed a _property_ of the `user` object, and as such, the `this.requestUpdate()` method is never called!
 
 An easy fix for this is to just call `this.requestUpdate()` manually, or alternatively replace the entire object to make sure the setter _does_ get called:
 
@@ -383,10 +401,9 @@ const batching = new Batching();
 batching.a = 1;
 batching.b = 2;
 
-/** 
- * 🎉 The result:
- * "updating!" is only logged to the console once because of the batching!
- */
+/* 🎉 The result: */
+
+// "updating!"
 ```
 
 ### Taking things a step further
@@ -445,7 +462,7 @@ class Batching {
   }
 }
 
-/* We use an IIFE (Immediately Invoked Function Expression), because top-level await is not a thing yet 😑 */
+/* We use an Async IIFE (Immediately Invoked Function Expression), because top-level await is not a thing yet 😑 */
 (async () => {
   /* We instantiate a new instance of our class */
   const batching = new Batching();
@@ -460,10 +477,10 @@ class Batching {
   /* We then assign another property */
   batching.b = 3;
 
-  /** 
-   * 🎉 The result:
-   * "updating!" is logged to the console twice!
-   */
+  /* 🎉 The result: */
+
+  // "updating!"
+  // "updating!"
 })();
 ```
 
@@ -576,10 +593,9 @@ const myElement = document.querySelector('my-element');
 myElement.a = 'foo';
 myElement.b = 'bar';
 
-/** 
- * 🎉 The result:
- * "updating!" is only logged to the console once!
- */
+/* 🎉 The result: */
+
+// "updating!"
 ```
 
 If you're interested in seeing another real world example that implements this pattern, you can take a look at [`@generic-components`](https://github.com/thepassle/generic-components/blob/master/utils/BatchingElement.js). The implementation is slightly different, but the same concepts apply.
