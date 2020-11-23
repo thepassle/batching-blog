@@ -2,7 +2,6 @@
 class BatchingElement extends HTMLElement {
   constructor() {
 
-    /* We now have to call `super` to make sure our element gets set up correctly */
     super();
     this.updateComplete = this.__createDeferredPromise();
   }
