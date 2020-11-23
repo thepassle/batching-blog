@@ -208,7 +208,7 @@ In fact, [Justin Fagnani](https://twitter.com/justinfagnani), one of the authors
 
 ### Deferring promises
 
-Alright, we're almost getting to the good stuff now. But before we go there, there's one final concept we need to explore, and thats deferring resolving of Promises, which will provide us with a handy utility later on in this blog post.
+Alright, we're almost ready to explain how LitElement achieves its efficient updates. But before we go there, there's one final concept we need to explore, and that's deferring resolving of Promises, which will provide us with a handy utility later on in this blog post.
 
 Take a look at the following code:
 
