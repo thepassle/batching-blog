@@ -177,7 +177,7 @@ batching.scheduleUpdate();
 /* `update` only ran once! */
 ```
 
-What we do here is essentially _gatekeep_ potentially multiple incoming calls for `scheduleUpdate` with the `if` statement, and cleverly use our newfound knowledge of microtasks to our advantage to process any other incoming calls _first_, and only once JavaScript has finished executing, and when its microtask processing time, our `update` function is called.
+Essentially, `scheduleUpdate` guards the `update` function against multiple incoming calls with its `if` statement. This cleverly uses our newfound knowledge of microtasks to our advantage to process any other incoming calls _first_. `update` only gets called once JavaScript has finished executing and microtask processing begins.
 
 As a fun tidbit of knowledge, we can also write the `scheduleUpdate` method like so:
 
@@ -208,7 +208,7 @@ In fact, [Justin Fagnani](https://twitter.com/justinfagnani), one of the authors
 
 ### Deferring promises
 
-Alright, we're almost getting to the good stuff now. But before we go there, there's one final concept we need to explore, and thats deferring resolving of Promises, which will provide us with a handy utility later on in this blog post.
+Alright, we're almost ready to explain how LitElement achieves its efficient updates. But before we go there, there's one final concept we need to explore, and that's deferring resolving of Promises, which will provide us with a handy utility later on in this blog post.
 
 Take a look at the following code:
 
@@ -601,4 +601,3 @@ myElement.b = 'bar';
 If you're interested in seeing another real world example that implements this pattern, you can take a look at [`@generic-components`](https://github.com/thepassle/generic-components/blob/master/utils/BatchingElement.js). The implementation is slightly different, but the same concepts apply.
 
 And thats how LitElement efficiently batches updates and avoids doing unnecessary work. Combine that with [lit-html](https://lit-html.polymer-project.org/) to do efficient DOM updates, and you have a really efficient and powerful combination of libraries at your disposal.
-
