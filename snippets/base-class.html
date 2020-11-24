@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <h1>Usage as a web component base class</h1>
+    <h2>Open your console 😉</h2>
+    <my-element></my-element>
+    <script type="module" src="./base-class.js"></script>
+    <script type="module">
+      /* We get a reference to our component, so we can call methods on it */
+      const myElement = document.querySelector('my-element');
+
+      /**
+       * We assign multiple properties in quick succession,
+       * but our component will still only call `update` once!
+       */
+      myElement.a = 'foo';
+      myElement.b = 'bar';
+
+      /**
+       * 🎉 The result:
+       * - "updating!" is logged to the console because of the call to `this.update()` in the `connectedCallback`
+       * - "updating!" is logged only once, after setting both the `a` and `b` properties
+       */
+    </script>
+  </body>
+</html>
