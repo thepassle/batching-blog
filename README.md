@@ -6,7 +6,7 @@ Gotta come up with a clever title. Suggestions?
 
 ## Intro
 
-[LitElement](https://lit-element.polymer-project.org/) is a base class for developing web components. It's very small, and very efficient at updating, and takes a lot of the heavy lifting of writing web components out of the developers hands, by being lazy (or: efficient).
+[LitElement](https://lit-element.polymer-project.org/) is a base class for developing web components. It's very small, efficient at updating, and takes a lot of the heavy lifting of writing web components out of the developers hands, by being lazy (or: efficient).
 
 Some questions that I often get during workshops, or from new colleagues who have just started working with LitElement are: 
 - How exactly does LitElement achieve its efficient updates? 
