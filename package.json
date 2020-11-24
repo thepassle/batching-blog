@@ -1,7 +1,7 @@
 {
   "name": "batching-blog",
   "version": "1.0.0",
-  "description": "Gotta come up with a clever title. Suggestions?",
+  "description": "LitElement: A Deepdive Into Batched Updates",
   "main": "index.js",
   "scripts": {
     "test": "wtr **/*.test.js --node-resolve"

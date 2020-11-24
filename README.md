@@ -1,6 +1,4 @@
-# LitElement: Doing less 
-
-Gotta come up with a clever title. Suggestions?
+# LitElement: A Deepdive Into Batched Updates
 
 > Whats always better than doing work? Not doing work!
 
