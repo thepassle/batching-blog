@@ -39,7 +39,7 @@ class MyElement extends LitElement {
 
 Hrm. Looks like we're in a bit of a pickle here. When should we re-render? Should we re-render after `myPropertyA` has been set? That would mean we might do a bunch of unnecessary work and rendering, because we also want our component to update when we set `myPropertyB`, so we'll end up with two renders, where one would have been sufficient. That doesn't sound very efficient. This would get out of hand really quickly if we'd have a lot more properties to set in a method.
 
-Fortunately, LitElement is smart and lazy, and uses a clever technique to _batch_ these updates, and only re-render _once_.
+Fortunately, LitElement is smart and lazy, and uses a clever technique to _batch_ these updates, and only re-render _once_. In order to understand how all this works, we're going to take a look at some popular batching patterns, dive into the event loop, and the internals of LitElement. Finally, we'll write a naive implementation of a batching web component base class.
 
 ## Batching
 
@@ -84,7 +84,7 @@ If the user types the search keyword "javascript" in the input, instead of firin
 
 > If you're interested in reading more about debouncing, here's a great blog on [css-tricks.com](https://css-tricks.com/debouncing-throttling-explained-examples/)
 
-However, and I’m sorry to disappoint, this is not how LitElement does things, but important to illustrate the point of "batching". Before we go deeper into that, we’re going to require some knowledge about...
+However, and I’m sorry to disappoint, this is not how LitElement does things but important to illustrate the point of "batching". Before we go deeper into that, we’re going to require some knowledge about...
 
 ## THE EVENT LOOP!
 
